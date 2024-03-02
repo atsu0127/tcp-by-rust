@@ -1,0 +1,23 @@
+version: "3.8"
+volumes:
+  db-store:
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: /bin/sh -c "service ssh start && chmod 755 ./setup.sh && sudo ./setup.sh && tail -f /dev/null"
+    tty: true
+    stdin_open: true
+    privileged: true
+    volumes:
+      - ./:/workspace
+    networks:
+      - dev-app-net
+    ports:
+      - "2222:22"
+
+networks:
+  dev-app-net:
+    driver: bridge
